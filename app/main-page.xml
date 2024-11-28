@@ -1,0 +1,79 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="bg-gray-100">
+    <ActionBar title="MikroTik Connection Manager" class="bg-primary text-white" />
+    
+    <ScrollView>
+        <StackLayout class="p-4">
+            <!-- Connection Type Selector -->
+            <Label text="Connection Type" class="text-lg font-semibold mb-2" />
+            <SegmentedBar selectedIndex="{{ connectionType === 'rest' ? 0 : 1 }}" 
+                         class="mb-4" 
+                         selectedBackgroundColor="#4F46E5">
+                <SegmentedBar.items>
+                    <SegmentedBarItem title="REST API" />
+                    <SegmentedBarItem title="PPTP VPN" />
+                </SegmentedBar.items>
+            </SegmentedBar>
+
+            <!-- Connection Form -->
+            <GridLayout rows="auto, auto, auto, auto, auto" columns="*" class="mb-4">
+                <!-- IP Address -->
+                <StackLayout row="0" class="mb-4">
+                    <Label text="IP Address" class="text-lg font-semibold mb-2" />
+                    <TextField text="{{ ipAddress }}" 
+                             hint="Enter IP address" 
+                             class="input p-4 bg-white rounded-lg border border-gray-300" />
+                </StackLayout>
+
+                <!-- Username -->
+                <StackLayout row="1" class="mb-4">
+                    <Label text="Username" class="text-lg font-semibold mb-2" />
+                    <TextField text="{{ username }}" 
+                             hint="Enter username" 
+                             class="input p-4 bg-white rounded-lg border border-gray-300" />
+                </StackLayout>
+
+                <!-- Password -->
+                <StackLayout row="2" class="mb-4">
+                    <Label text="Password" class="text-lg font-semibold mb-2" />
+                    <TextField text="{{ password }}" 
+                             hint="Enter password" 
+                             secure="true" 
+                             class="input p-4 bg-white rounded-lg border border-gray-300" />
+                </StackLayout>
+
+                <!-- Port (REST API only) -->
+                <StackLayout row="3" 
+                           class="mb-4" 
+                           visibility="{{ isRestType ? 'visible' : 'collapsed' }}">
+                    <Label text="Port Number" class="text-lg font-semibold mb-2" />
+                    <TextField text="{{ port }}" 
+                             hint="Enter port number" 
+                             keyboardType="number" 
+                             class="input p-4 bg-white rounded-lg border border-gray-300" />
+                </StackLayout>
+
+                <!-- Error Message -->
+                <Label row="4" 
+                       text="{{ state.error }}" 
+                       class="text-red-500 mb-4" 
+                       visibility="{{ state.error ? 'visible' : 'collapsed' }}" 
+                       textWrap="true" />
+            </GridLayout>
+
+            <!-- Connect/Disconnect Button -->
+            <Button text="{{ state.isConnected ? 'Disconnect' : 'Connect' }}" 
+                    tap="{{ state.isConnected ? disconnect : connect }}" 
+                    isEnabled="{{ !state.isLoading }}"
+                    class="{{ state.isConnected ? 'bg-red-500' : 'bg-primary' }} text-white p-4 rounded-lg" />
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator busy="{{ state.isLoading }}" 
+                             visibility="{{ state.isLoading ? 'visible' : 'collapsed' }}" 
+                             class="mt-4" />
+
+            <!-- Connection Status -->
+            <Label text="{{ state.isConnected ? 'Connected' : 'Disconnected' }}" 
+                   class="{{ state.isConnected ? 'text-green-500' : 'text-gray-500' }} text-center mt-4" />
+        </StackLayout>
+    </ScrollView>
+</Page>
